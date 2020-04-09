@@ -1,0 +1,21 @@
+# ---------------- slurm client svc ---------------- #
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: slurm
+  labels:
+    name: sclient-dev-psu
+  name: svc-slurm-client-dev-psu
+spec:
+  type: NodePort
+  selector:
+    name: sclient-dev-psu
+  ports:
+  - port: 22
+    targetPort: 22
+    nodePort: 30100
+    name: sshd
+  - port: 8888
+    targetPort: 8888
+    nodePort: 30101
+    name: jupyter

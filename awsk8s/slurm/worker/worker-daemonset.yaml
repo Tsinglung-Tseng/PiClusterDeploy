@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: slurm-worker
+  namespace: slurm
+  labels:
+    name: slurm-worker
+spec:
+  selector:
+    matchLabels:
+      name: slurm-worker
+  template:
+    metadata:
+      labels:
+        name: slurm-worker
+    spec:
+      containers:
+      - name: slurm-worker
+        image: registry.cn-shanghai.aliyuncs.com/pitech-docker-hub/slurm-worker:latest
+        volumeMounts:
+        - mountPath: /etc/slurm-llnl
+          name: slurm-config
+        - mountPath: /opt/spack
+          name: spack
+        - mountPath: /mnt/hashfs
+          name: data
+        - mountPath: /mnt/users
+          name: clusterfs
+      volumes:
+      - name: slurm-config
+        hostPath:
+          path: /mnt/deployment/picluster/src/k8s/slurm-conf
+          type: Directory
+      - name: spack
+        hostPath:
+          path: /mnt/spack
+          type: Directory
+      - name: data
+        hostPath:
+          path: /mnt/hashfs
+          type: Directory
+      - name: clusterfs
+        hostPath:
+          path: /mnt/users
+          type: Directory
+      imagePullSecrets:
+      - name: aliyun

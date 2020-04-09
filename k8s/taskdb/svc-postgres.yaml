@@ -1,0 +1,26 @@
+#apiVersion: v1
+#kind: Pod
+#metadata:
+#  namespace: slurm
+#  name: taskdb
+#  labels:
+#    name: taskdb
+#spec:
+#  containers:
+#  - image: postgres
+#    name: taskdb
+#    ports:
+#      - containerPort: 5432
+
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: slurm
+  name: taskdb
+spec:
+  type: NodePort
+  ports:
+    - port: 5432
+      nodePort: 30002
+  selector:
+    name: taskdb
